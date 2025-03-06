@@ -40,6 +40,7 @@ namespace QuDevChallenge
         {
             List<string> result = new List<string>();
 
+            //Finds all words on the Matrix
             List<WordsAndOcurrencies> found = FindAll(wordstream);
 
             if (found.Count < 11)
@@ -49,7 +50,7 @@ namespace QuDevChallenge
                     result.Add(word.Word);
                 }
             }
-            else
+            else // Return 10 words with more occurrencies
             {
                 found.Sort();
                 found.Reverse();
@@ -70,6 +71,7 @@ namespace QuDevChallenge
             List<WordsAndOcurrencies> found = new List<WordsAndOcurrencies>();
             int ocurrencies = 0;
             WordsAndOcurrencies wordAndOcurrencies;
+            
             foreach (string word in wordstream)
             {
                 ocurrencies = 0;
@@ -88,46 +90,46 @@ namespace QuDevChallenge
 
         private int FindHorizontally(string word)
         {
-            int ocurrencies = 0;
+            int occurrences = 0;
 
             foreach (string row in _matrix)
             {
                 if (row.ToLower().Contains(word.ToLower()))
-                    ocurrencies++;
+                    occurrences++;
             }
 
-            return ocurrencies;
+            return occurrences;
         }
 
         private int FindVertically(string word)
         {
-            int ocurrencies = 0;
+            int occurrences = 0;
 
             foreach (string row in _matrixRotated)
             {
                 if (row.ToLower().Contains(word.ToLower()))
-                    ocurrencies++;
+                    occurrences++;
             }
 
-            return ocurrencies;
+            return occurrences;
         }
     }
 
     class WordsAndOcurrencies : IComparable<WordsAndOcurrencies> 
     {
         public string Word { get; set; }
-        public int Ocurrencies { get; set; }
+        public int Occurrences { get; set; }
 
         public WordsAndOcurrencies(string word, int ocurrencies)
         {
-            Word = word; Ocurrencies = ocurrencies;
+            Word = word; Occurrences = ocurrencies;
         }
 
         public int CompareTo(WordsAndOcurrencies? other)
         {
-            if (Ocurrencies < other.Ocurrencies)
+            if (Occurrences < other.Occurrences)
                 return -1;
-            if (Ocurrencies > other.Ocurrencies)
+            if (Occurrences > other.Occurrences)
                 return 1;
 
             return 0;
