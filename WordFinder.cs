@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using QuDevChallenge.Model;
+using QuDevChallenge.Extensions;
 using System.Text;
-using System.Threading.Tasks;
-
 namespace QuDevChallenge
 {
     public class WordFinder
@@ -41,8 +37,8 @@ namespace QuDevChallenge
             List<string> result = new List<string>();
 
             //Finds all words on the Matrix
-            List<WordsAndOcurrencies> found = FindAll(wordstream);
-
+            List<WordsAndOcurrencies> found = RemoveDuplicated(FindAll(wordstream));
+            
             if (found.Count < 11)
             {
                 foreach (var word in found)
@@ -113,27 +109,26 @@ namespace QuDevChallenge
 
             return occurrences;
         }
-    }
 
-    class WordsAndOcurrencies : IComparable<WordsAndOcurrencies> 
-    {
-        public string Word { get; set; }
-        public int Occurrences { get; set; }
-
-        public WordsAndOcurrencies(string word, int ocurrencies)
+        private List<WordsAndOcurrencies> RemoveDuplicated(List<WordsAndOcurrencies> words)
         {
-            Word = word; Occurrences = ocurrencies;
-        }
+            List<WordsAndOcurrencies> result = new List<WordsAndOcurrencies>();
 
-        public int CompareTo(WordsAndOcurrencies? other)
-        {
-            if (Occurrences < other.Occurrences)
-                return -1;
-            if (Occurrences > other.Occurrences)
-                return 1;
+            bool found = false;
+            foreach(WordsAndOcurrencies word in words)
+            {
+                found = false;
+                foreach (WordsAndOcurrencies resultWord in result)
+                {
+                    if(resultWord.Same(word))
+                        found = true;
+                }
 
-            return 0;
+                if(!found)
+                    result.Add(word);
+            }
 
+            return result;
         }
     }
 }
